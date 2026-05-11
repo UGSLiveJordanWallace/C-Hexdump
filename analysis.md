@@ -19,3 +19,28 @@
 4. Registers like r11 - r15 and the specialized registers (rbx, rdi, and rax) are used more frequently. O3 is using most registers to speed up the runtime
 5. THe number of lines in O1 is 506 lines shorter than O3
     - This could be due to a number additional directives that the compiler has included
+
+## Example
+1. In O0, the compiler would use the rbp registers to index into the stack and set the memory for individual variables.
+	pushq	%rbp
+	movq	%rsp, %rbp 
+	subq	$32, %rsp
+	movq	%rdi, -24(%rbp) <--
+	movq	%rsi, -32(%rbp) <--
+	movq	-32(%rbp), %rax <--
+	movl	%eax, %esi
+	movl	$.LC0, %edi
+	movl	$0, %eax
+	call	printf
+
+2. In O3 however, the compile made use of the registers. Registers are much faster, and the use of dedicated registers for specific instructions was much more prevelent.
+	pushq	%r12 <-- r12
+	xorl	%eax, %eax
+	pushq	%rbp
+	pushq	%rbx <-- rbx
+	movq	%rdi, %rbx
+	movl	$.LC0, %edi
+.LVL1:
+	leaq	16(%rbx), %r12 <-- r12
+	movq	%rbx, %rbp <-- rbx
+	call	printf

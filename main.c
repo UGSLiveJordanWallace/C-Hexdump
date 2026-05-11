@@ -5,7 +5,7 @@ void print_dump(unsigned char chunk[16], size_t bytesRead) {
 	printf("%012X", (int)bytesRead);
 
 	for (int i = 0; i < 16; i++) {
-		printf(" %X", chunk[i]);
+		printf(" %02X", chunk[i]);
 	}
 
 	printf(" |");
